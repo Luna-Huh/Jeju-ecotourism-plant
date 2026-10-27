@@ -145,6 +145,15 @@ section+section{margin-top:64px}
 .pm-villages span{text-align:center;padding:6px 4px;border-radius:999px;background:#f1f1ec;color:#9a968a;font-size:14px}
 .pm-villages span.on{background:var(--vt);color:var(--deep);font-weight:700}
 .modal-note{font-size:11.5px;color:var(--muted);margin:16px 0 0}
+.pm-from{display:flex;align-items:center;gap:10px;margin:-6px 44px 16px 0;padding:9px 14px;background:var(--vc);color:var(--deep);font-size:13.5px;font-weight:700;border-radius:2px}
+.pm-from b{font-family:var(--serif);font-size:15px}
+.pm-go{margin-top:20px;padding:18px 18px 16px;background:var(--vt);border-radius:2px}
+.pm-go h3{margin:0 0 4px;font-family:var(--serif);font-size:18px;color:var(--deep)}
+.pm-go p{margin:0 0 12px;font-size:13px;color:#4e4224}
+.pm-go-btns{display:flex;flex-wrap:wrap;gap:8px}
+.pm-go-btns .btn{font-size:13.5px;padding:10px 14px}
+.pm-villages button{font:inherit;border:0;cursor:pointer;text-align:center;padding:6px 4px;border-radius:999px;background:var(--vt);color:var(--deep);font-size:14px;font-weight:700}
+.pm-villages button:hover{filter:brightness(.95);text-decoration:underline}
 
 /* ---------- village detail ---------- */
 .vm-head{background:var(--vc);padding:30px 32px 22px;color:var(--deep)}
@@ -238,7 +247,9 @@ footer .credit{margin-top:12px;font-family:var(--serif);font-weight:700;color:va
   .pm-thumb{flex:0 0 42%;aspect-ratio:16/10;min-height:0}
   .pm-table{grid-template-columns:1fr}
   .pm-row{grid-template-columns:76px minmax(0,1fr)}
-  .pm-villages span{font-size:12.5px}
+  .pm-villages span,.pm-villages button{font-size:12.5px}
+  .pm-from{margin-right:48px}
+  .pm-go-btns .btn{flex:1 1 100%}
   .vm-head{padding:24px 16px 18px}.vm-body{padding:18px 16px 24px}
   .facts{grid-template-columns:80px minmax(0,1fr)}
   .org{grid-template-columns:88px minmax(0,1fr)}
@@ -669,12 +680,12 @@ function init(){
 function renderHero(){
   $("heroMosaic").innerHTML=heroPicks.map((h,i)=>{
     const c=villageInfo[h.village].color;
-    return `<button class="strip" data-plant="${esc(h.plant)}" style="--vc:${c}" aria-label="${esc(h.village)} 주요종 ${esc(h.plant)} 자세히 보기">
+    return `<button class="strip" data-plant="${esc(h.plant)}" data-village="${esc(h.village)}" style="--vc:${c}" aria-label="${esc(h.village)} 주요종 ${esc(h.plant)} 자세히 보기">
       <img src="${h.img}" alt="${esc(h.village)}의 ${esc(h.plant)}"${i>1?' loading="lazy"':''}>
       <span class="strip-top"><b>0${i+1}</b>${esc(h.village)}</span>
       <span class="strip-bottom"><strong>${esc(h.plant)}</strong><small>${esc(h.note)}</small></span></button>`;
   }).join("");
-  $("heroMosaic").addEventListener("click",e=>{const b=e.target.closest("[data-plant]");if(!b)return;const i=plants.findIndex(p=>p.name===b.dataset.plant);if(i>=0)openPlant(i);});
+  $("heroMosaic").addEventListener("click",e=>{const b=e.target.closest("[data-plant]");if(!b)return;const i=plants.findIndex(p=>p.name===b.dataset.plant);if(i>=0)openPlant(i,b.dataset.village);});
 }
 
 /* ===== 01 우리 마을 ===== */
@@ -776,9 +787,10 @@ const rowDefs=[
   [["보전등급"],"보전등급"]
 ];
 const labelFor={"꽃과 포자":"꽃과 포자","꽃":"꽃","줄기와 뿌리":"줄기·뿌리","수피(줄기)":"수피·줄기"};
-function openPlant(i){
+function openPlant(i, fromVillage){
   const p=plants[i], f=p.fields||{}, photos=photoMap[p.name]||[];
   let html="";
+  if(fromVillage) html+=`<div class="pm-from" style="--vc:${villageInfo[fromVillage].color}"><b>${esc(fromVillage)}</b>의 우리 마을 주요종</div>`;
   if(photos.length){
     html+=`<div class="pm-photos${photos.length===1?" single":""}"><figure class="pm-main"><button type="button" id="pmMainBtn" aria-label="사진 크게 보기"><img id="pmMainImg" src="${photoUrl(photos[0][0])}" alt="${esc(p.name)} ${esc(photos[0][1])}"></button><figcaption id="pmMainCap">${esc(photos[0][1])}</figcaption><span class="zoom-hint">눌러서 크게 보기</span></figure>`;
     if(photos.length>1) html+=`<div class="pm-thumbs-wrap"><div class="pm-thumbs">${photos.map(([path,label],k)=>`<button type="button" class="pm-thumb${k===0?" active":""}" data-k="${k}" aria-label="${esc(label)} 사진 보기"><img src="${photoUrl(path)}" alt="" loading="lazy"><span>${esc(label)}</span></button>`).join("")}</div></div>`;
@@ -794,9 +806,16 @@ function openPlant(i){
   }
   html+=`</div>`;
   if(f["마을 쓰임새"]) html+=`<div class="pm-usage"><b>마을 쓰임새</b>${esc(f["마을 쓰임새"])}</div>`;
-  html+=`<div class="pm-villages" aria-label="관찰 마을">${villageOrder.map(v=>{const on=p.villages.includes(v);return `<span class="${on?"on":""}" style="--vt:${tint(v,.6)}" aria-label="${esc(v)} ${on?"관찰":"기록 없음"}">${esc(v)}</span>`;}).join("")}</div>`;
-  html+=`<p class="modal-note">현장조사 목록을 바탕으로 정리한 정보입니다. 색이 칠해진 마을에서 관찰되었습니다.${photos.length?" 사진을 누르면 크게 볼 수 있습니다.<br>사진 제공: "+esc(PHOTO_CREDIT):""}</p>`;
+  html+=`<div class="pm-villages" aria-label="관찰 마을">${villageOrder.map(v=>{const on=p.villages.includes(v);return on?`<button type="button" data-golist="${esc(v)}" style="--vt:${tint(v,.6)}" aria-label="${esc(v)} 식물 목록 보기">${esc(v)}</button>`:`<span aria-label="${esc(v)} 기록 없음">${esc(v)}</span>`;}).join("")}</div>`;
+  if(fromVillage){
+    const st=villageStats(fromVillage);
+    html+=`<div class="pm-go" style="--vt:${tint(fromVillage,.38)}"><h3>${esc(fromVillage)}의 식물 더 보기</h3><p>${esc(fromVillage)}에서는 식물 ${st.total}종이 기록되었고, 그중 ${st.uniq}종은 ${esc(fromVillage)}에서만 만날 수 있는 우리 마을 주요종입니다.</p>
+      <div class="pm-go-btns"><button type="button" class="btn" data-golist="${esc(fromVillage)}" data-kind="all">${esc(fromVillage)} 식물 목록 보기 (${st.total}종) →</button><button type="button" class="btn ghost" data-golist="${esc(fromVillage)}" data-kind="uniq">우리 마을 주요종만 보기 (${st.uniq}종)</button><button type="button" class="btn ghost" data-govillage="${esc(fromVillage)}">${esc(fromVillage)} 지도·마을 정보</button></div></div>`;
+  }
+  html+=`<p class="modal-note">현장조사 목록을 바탕으로 정리한 정보입니다. 색이 칠해진 마을에서 관찰되었습니다(누르면 그 마을 식물 목록으로 이동).${photos.length?" 사진을 누르면 크게 볼 수 있습니다.<br>사진 제공: "+esc(PHOTO_CREDIT):""}</p>`;
   $("pmBody").innerHTML=html;
+  $("pmBody").querySelectorAll("[data-golist]").forEach(b=>b.addEventListener("click",()=>goToVillageList(b.dataset.golist,b.dataset.kind||"all")));
+  $("pmBody").querySelectorAll("[data-govillage]").forEach(b=>b.addEventListener("click",()=>{closeOverlay("plant");openVillage(b.dataset.govillage);}));
   if(photos.length){
     let cur=0;
     const setMain=k=>{cur=k;const [path,label]=photos[k];$("pmMainImg").src=photoUrl(path);$("pmMainImg").alt=`${p.name} ${label}`;$("pmMainCap").textContent=label;document.querySelectorAll(".pm-thumb").forEach(t=>t.classList.toggle("active",Number(t.dataset.k)===k));};
@@ -804,6 +823,15 @@ function openPlant(i){
     $("pmMainBtn").addEventListener("click",()=>openViewer(photoUrl(photos[cur][0]),`${p.name} · ${photos[cur][1]}`,`사진 제공: ${PHOTO_CREDIT}`));
   }
   showOverlay("plant");
+}
+
+/* 마을 식물 목록으로 바로 가기 */
+function goToVillageList(v,kind){
+  closeOverlay("plant");
+  state.kind=kind||"all";
+  $("search").value=""; $("familyFilter").value="";
+  setVillage(v);
+  $("plants").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 /* ===== 오버레이 ===== */

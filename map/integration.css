@@ -6,3 +6,5 @@
 .catalog-back:hover{background:#f0f4ee}
 /* lock=1: one village only */
 .atlas-locked .sidebar-heading,.atlas-locked #village-buttons,.atlas-locked #village-buttons + .divider,.atlas-locked #illustration-villages,.atlas-locked .village-label{display:none!important}
+/* Catalog site: show only the four village choices (no "네 마을 전체") */
+#village-buttons .village-button.overview{display:none!important}

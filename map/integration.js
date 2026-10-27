@@ -17,3 +17,6 @@ document.addEventListener('DOMContentLoaded',()=>{const a=document.getElementByI
   window.selectVillage=function(id,...rest){return id===locked?original.call(this,id,...rest):Promise.resolve();};
  });
 })();
+
+// Catalog site: the "all villages" view is not offered; open the first village instead.
+(()=>{const q=new URLSearchParams(location.search);if(q.get('village')==='all'||!q.get('village')){q.set('village','jeoji');history.replaceState(null,'',`${location.pathname}?${q}${location.hash}`);}})();

@@ -823,8 +823,8 @@ function openPlant(i, fromVillage){
   let html="";
   if(fromVillage) html+=`<div class="pm-from" style="--vc:${villageInfo[fromVillage].color}"><b>${esc(fromVillage)}</b>의 우리 마을 주요종</div>`;
   if(photos.length){
-    html+=`<div class="pm-photos${photos.length===1?" single":""}"><figure class="pm-main"><button type="button" id="pmMainBtn" aria-label="사진 크게 보기"><img id="pmMainImg" src="${photoUrl(photos[0][0])}" alt="${esc(p.name)} ${esc(photos[0][1])}"></button><figcaption id="pmMainCap">${esc(photos[0][1])}</figcaption><span class="zoom-hint">눌러서 크게 보기</span></figure>`;
-    if(photos.length>1) html+=`<div class="pm-thumbs-wrap"><div class="pm-thumbs">${photos.map(([path,label],k)=>`<button type="button" class="pm-thumb${k===0?" active":""}" data-k="${k}" aria-label="${esc(label)} 사진 보기"><img src="${photoUrl(path)}" alt="" loading="lazy"><span>${esc(label)}</span></button>`).join("")}</div></div>`;
+    html+=`<div class="pm-photos${photos.length===1?" single":""}"><figure class="pm-main"><button type="button" id="pmMainBtn" aria-label="사진 크게 보기"><img id="pmMainImg" src="${photoUrl(photos[0][0])}" alt="${esc(p.name)} ${esc(photos[0][1])}"></button><span class="zoom-hint">눌러서 크게 보기</span></figure>`;
+    if(photos.length>1) html+=`<div class="pm-thumbs-wrap"><div class="pm-thumbs">${photos.map(([path,label],k)=>`<button type="button" class="pm-thumb${k===0?" active":""}" data-k="${k}" aria-label="${k+1}번째 사진 보기"><img src="${photoUrl(path)}" alt="" loading="lazy"></button>`).join("")}</div></div>`;
     html+=`</div>`;
   }
   html+=`<div class="pm-head"><h2 id="pmName">${esc(p.name)}</h2><span class="scientific">${esc(p.scientific)}</span></div><div class="pm-table">`;
@@ -849,9 +849,9 @@ function openPlant(i, fromVillage){
   $("pmBody").querySelectorAll("[data-govillage]").forEach(b=>b.addEventListener("click",()=>{closeOverlay("plant");openVillage(b.dataset.govillage);}));
   if(photos.length){
     let cur=0;
-    const setMain=k=>{cur=k;const [path,label]=photos[k];$("pmMainImg").src=photoUrl(path);$("pmMainImg").alt=`${p.name} ${label}`;$("pmMainCap").textContent=label;document.querySelectorAll(".pm-thumb").forEach(t=>t.classList.toggle("active",Number(t.dataset.k)===k));};
+    const setMain=k=>{cur=k;const [path,label]=photos[k];$("pmMainImg").src=photoUrl(path);$("pmMainImg").alt=`${p.name} ${label}`;document.querySelectorAll(".pm-thumb").forEach(t=>t.classList.toggle("active",Number(t.dataset.k)===k));};
     document.querySelectorAll(".pm-thumb").forEach(t=>t.addEventListener("click",()=>setMain(Number(t.dataset.k))));
-    $("pmMainBtn").addEventListener("click",()=>openViewer(photoUrl(photos[cur][0]),`${p.name} · ${photos[cur][1]}`,`사진 제공: ${PHOTO_CREDIT}`));
+    $("pmMainBtn").addEventListener("click",()=>openViewer(photoUrl(photos[cur][0]),`${p.name}`,`사진 제공: ${PHOTO_CREDIT}`));
   }
   showOverlay("plant");
 }

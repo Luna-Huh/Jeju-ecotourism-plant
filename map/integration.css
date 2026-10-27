@@ -31,3 +31,15 @@ body{background:var(--paper);color:var(--ink)}
 .brand small{color:#77715f}
 #village-title,.sidebar-heading h2,.page-heading h1,h2,h3{font-family:'Gowun Batang',serif}
 :root:not([data-village]) .header{border-bottom:4px solid #b9b75e}
+/* ---- Public release: hide review/verification-only details ---- */
+.scope-label,.coordinate-readout,.map-footer,.source-reference,.position-summary,.guide-scope-note,.position-filter-label,
+.guide-location-status,.guide-source-note,.match-badge,.candidate-name,.candidate-note,.matching-details,
+.terrain-card-foot>span:first-child,.terrain-sources>p:last-of-type,#visible-count{display:none!important}
+.terrain-card-foot{justify-content:flex-end}
+/* metric text when a village has no spring data */
+.metric-value{white-space:nowrap}
+/* warm dialog backdrop and village-coloured active tabs inside the picture-map */
+dialog::backdrop{background:#30281980}
+#illustration-villages button.active,#illustration-villages button[aria-pressed="true"],#illustration-pages button.active,#illustration-pages button[aria-pressed="true"]{background:var(--green)!important;color:#fff!important;border-color:var(--green)!important}
+#export-button,#quality-button{display:none!important}
+.partial-note,.enrichment-date,.status-pill:empty{display:none!important}

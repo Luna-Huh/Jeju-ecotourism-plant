@@ -738,7 +738,7 @@ function openVillage(v){
   if(d.surveySites&&d.surveySites.length) parts.push(`<div class="vm-survey"><b>식물 조사 장소</b><span>${d.surveySites.map(esc).join(" · ")}</span></div>`);
   parts.push(`<section class="atlas-embed" aria-label="${esc(v)} 환경지도">
     <div class="atlas-head"><span class="atlas-icon">${ATLAS_ICON}</span><span class="atlas-text"><b>${esc(v)} 환경지도</b><small>농지·투수성 지형·용천수, 마을 그림지도와 탐방길을 지도에서 직접 살펴보세요. 번호나 지점을 누르면 자세한 설명이 나옵니다.</small></span><a class="atlas-go" href="${atlasUrl(v)}">크게 보기 ↗</a></div>
-    <iframe class="atlas-frame" src="${atlasUrl(v)}&embed=1" title="${esc(v)} 환경지도" loading="lazy" allow="geolocation" allowfullscreen></iframe></section>`);
+    <iframe class="atlas-frame" src="${atlasUrl(v)}&embed=1&lock=1" title="${esc(v)} 환경지도" loading="lazy" allow="geolocation" allowfullscreen></iframe></section>`);
   const inf=d.info;
   if(inf){
     let left=`<div class="vm-box"><h3>마을 개요</h3><p>${esc(inf.overview)}</p>`;

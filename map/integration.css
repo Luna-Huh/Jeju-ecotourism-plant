@@ -4,3 +4,5 @@
 
 .catalog-back{text-decoration:none;font-weight:700;color:#245344;white-space:nowrap;padding:7px 10px;border:1px solid #cad8c2;border-radius:8px;background:#fff}
 .catalog-back:hover{background:#f0f4ee}
+/* lock=1: one village only */
+.atlas-locked .sidebar-heading,.atlas-locked #village-buttons,.atlas-locked #village-buttons + .divider,.atlas-locked #illustration-villages,.atlas-locked .village-label{display:none!important}

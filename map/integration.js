@@ -6,3 +6,14 @@ if(new URLSearchParams(location.search).get('embed')==='1')document.documentElem
 document.addEventListener('DOMContentLoaded',()=>{const a=document.getElementById('catalog-back');if(!a)return;
  const upd=()=>{const v=new URLSearchParams(location.search).get('village');a.href=(v&&v!=='all')?`../?village=${encodeURIComponent(v)}`:'../';};
  upd();a.addEventListener('pointerdown',upd);a.addEventListener('focus',upd);a.addEventListener('click',upd);});
+
+// Catalog village page: lock=1 shows only the requested village (no switching to other villages).
+(()=>{const q=new URLSearchParams(location.search);const locked=q.get('village');
+ if(q.get('lock')!=='1'||!['jeoji','pyeongdae','harye','hogeun'].includes(locked))return;
+ document.documentElement.classList.add('atlas-locked');
+ document.addEventListener('DOMContentLoaded',()=>{
+  if(typeof window.selectVillage!=='function')return;
+  const original=window.selectVillage;
+  window.selectVillage=function(id,...rest){return id===locked?original.call(this,id,...rest):Promise.resolve();};
+ });
+})();

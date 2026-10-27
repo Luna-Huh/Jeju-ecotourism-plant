@@ -20,3 +20,11 @@ document.addEventListener('DOMContentLoaded',()=>{const a=document.getElementByI
 
 // Catalog site: the "all villages" view is not offered; open the first village instead.
 (()=>{const q=new URLSearchParams(location.search);if(q.get('village')==='all'||!q.get('village')){q.set('village','jeoji');history.replaceState(null,'',`${location.pathname}?${q}${location.hash}`);}})();
+
+// Village colours from the plant catalog: html[data-village] drives the theme in integration.css.
+(()=>{const ids=['jeoji','pyeongdae','harye','hogeun'];const root=document.documentElement;
+ const apply=()=>{const v=new URLSearchParams(location.search).get('village');if(ids.includes(v))root.dataset.village=v;};
+ apply();
+ document.addEventListener('DOMContentLoaded',()=>{if(typeof window.selectVillage!=='function')return;const inner=window.selectVillage;
+  window.selectVillage=async function(...args){const r=await inner.apply(this,args);apply();return r;};});
+})();

@@ -185,9 +185,11 @@ section+section{margin-top:64px}
 .vm-survey small{flex-basis:100%;font-size:12.5px;color:#6b5b48}
 .vm-pending{background:#f6f1e6;border:1px dashed #d8cdb4;padding:16px 18px;font-size:14px;color:#5f5440;margin-top:22px}
 .vm-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-.atlas-embed{margin-top:22px;border:1px solid #c9d8c4;border-radius:2px;overflow:hidden;background:#fff}
-.atlas-head{display:flex;align-items:center;gap:14px;padding:14px 16px;background:#e9f0e7;color:#1f4a3e}
-.atlas-head .atlas-go{color:#1f4a3e;text-decoration:none;border:1px solid #9fbb9a;background:#fff;padding:7px 12px;border-radius:2px}
+.atlas-embed{margin-top:22px;border:1px solid var(--vc,#c9d8c4);border-radius:2px;overflow:hidden;background:#fff}
+.atlas-head{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--vt,#e9f0e7);color:var(--deep);border-bottom:4px solid var(--vc,#c9d8c4)}
+.atlas-embed .atlas-icon{background:var(--vd,#245344);color:#fffdf0}
+.atlas-head .atlas-text small{color:#5a4b33}
+.atlas-head .atlas-go{color:var(--vd,#1f4a3e);text-decoration:none;border:1px solid var(--vc,#9fbb9a);background:#fff;padding:7px 12px;border-radius:2px}
 .atlas-head .atlas-go:hover{background:#f3f7f1}
 .atlas-frame{display:block;width:100%;height:min(760px,82vh);border:0;background:#f7f8f4}
 .atlas-card{display:flex;align-items:center;gap:16px;margin-top:14px;padding:16px 18px;background:#e9f0e7;border:1px solid #c9d8c4;border-radius:2px;color:#1f4a3e;text-decoration:none;transition:background .2s,box-shadow .2s}
@@ -647,6 +649,7 @@ const villageInfo = {
 const OSM = "기본도 © OpenStreetMap contributors";
 /* 마을 환경지도(map 폴더)로 연결할 때 쓰는 마을 ID */
 const atlasIds = {"저지리":"jeoji","평대리":"pyeongdae","하례리":"harye","호근동":"hogeun"};
+const atlasDeep = {"저지리":"#6d405f","평대리":"#666533","하례리":"#6d4541","호근동":"#636d41"};
 const atlasUrl = v => "map/?village=" + (atlasIds[v]||"all");
 const ATLAS_ICON = '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 23 13 8l6 10 3-5 6 10H5Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 27c5-3 11 2 16-1" stroke="currentColor" stroke-width="1.6"/><circle cx="23" cy="7" r="2" fill="currentColor"/></svg>';
 /* 첫 화면 대표 사진: 마을마다 '우리 마을 주요종' 한 종씩. 바꾸려면 plant와 img만 고치면 됩니다. */
@@ -736,7 +739,7 @@ function openVillage(v){
   parts.push(`<div class="vm-body"><figure class="vm-map"><button type="button" id="vmMapBtn" aria-label="${esc(v)} 지도 크게 보기"><img src="${d.map}" alt="${esc(v)} 지도: ${esc(d.legend.join(", "))} 표시"><span class="zoom-hint">지도 크게 보기 ⤢</span></button>
     <figcaption><span>범례: ${esc(d.legend.join(" · "))} · 빨간 점: 식물 조사 장소 · 파란 점: 마을 주요 장소</span><span>${OSM}</span></figcaption></figure>`);
   if(d.surveySites&&d.surveySites.length) parts.push(`<div class="vm-survey"><b>식물 조사 장소</b><span>${d.surveySites.map(esc).join(" · ")}</span></div>`);
-  parts.push(`<section class="atlas-embed" aria-label="${esc(v)} 환경지도">
+  parts.push(`<section class="atlas-embed" aria-label="${esc(v)} 환경지도" style="--vc:${d.color};--vd:${atlasDeep[v]};--vt:${tint(v,.3)}">
     <div class="atlas-head"><span class="atlas-icon">${ATLAS_ICON}</span><span class="atlas-text"><b>${esc(v)} 환경지도</b><small>농지·투수성 지형·용천수, 마을 그림지도와 탐방길을 지도에서 직접 살펴보세요. 번호나 지점을 누르면 자세한 설명이 나옵니다.</small></span><a class="atlas-go" href="${atlasUrl(v)}">크게 보기 ↗</a></div>
     <iframe class="atlas-frame" src="${atlasUrl(v)}&embed=1&lock=1" title="${esc(v)} 환경지도" loading="lazy" allow="geolocation" allowfullscreen></iframe></section>`);
   const inf=d.info;

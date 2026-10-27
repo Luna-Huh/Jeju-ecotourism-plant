@@ -43,3 +43,8 @@ dialog::backdrop{background:#30281980}
 #illustration-villages button.active,#illustration-villages button[aria-pressed="true"],#illustration-pages button.active,#illustration-pages button[aria-pressed="true"]{background:var(--green)!important;color:#fff!important;border-color:var(--green)!important}
 #export-button,#quality-button{display:none!important}
 .partial-note,.enrichment-date,.status-pill:empty{display:none!important}
+
+/* 넓은 화면(1650px+)에서도 마을 비교는 한 칸 전체 폭 */
+.workspace.compare-mode{grid-template-columns:minmax(0,1fr)!important}
+.compare-mode .compare-view{max-width:1250px;width:100%;margin:0 auto}
+.compare-water>div.status-list{justify-content:flex-start;gap:8px 18px;margin-top:10px}

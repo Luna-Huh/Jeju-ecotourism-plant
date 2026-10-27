@@ -28,3 +28,6 @@ document.addEventListener('DOMContentLoaded',()=>{const a=document.getElementByI
  document.addEventListener('DOMContentLoaded',()=>{if(typeof window.selectVillage!=='function')return;const inner=window.selectVillage;
   window.selectVillage=async function(...args){const r=await inner.apply(this,args);apply();return r;};});
 })();
+
+// Brand goes to the plant catalog home (instead of the map's own reset handler).
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a.brand');if(a){e.stopPropagation();}},true);

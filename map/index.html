@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="제주 네 마을의 농지, 투수성 지형, 용천수를 살펴보는 인터랙티브 환경지도.">
-  <meta name="theme-color" content="#214f43">
-  <title>제주 마을 환경지도 · KMYN</title>
+  <meta name="theme-color" content="#b9b75e">
+  <title>마을 환경지도 · 우리 마을 식물 알아보기</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="guides.css?v=20261025-pin-selection">
   <link rel="stylesheet" href="integration.css"><script src="integration.js" defer></script>
@@ -13,7 +14,7 @@
 </head>
 <body>
 <header class="header">
-  <a class="brand" href="#" aria-label="환경지도 처음으로"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M5 23 13 8l6 10 3-5 6 10H5Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 27c5-3 11 2 16-1" stroke="currentColor" stroke-width="1.6"/><circle cx="23" cy="7" r="2" fill="currentColor"/></svg></span><span><strong>제주 마을 환경지도</strong><small>KMYN <span> / </span> JEJU VILLAGE ATLAS</small></span></a>
+  <a class="brand" href="../" aria-label="우리 마을 식물 알아보기 첫 화면으로"><span class="brand-icon brand-leaf" aria-hidden="true">❧</span><span><strong>마을 환경지도</strong><small>우리 마을 식물 알아보기</small></span></a>
   <nav class="main-nav" aria-label="화면 선택"><button class="nav-btn active" data-view="map">지도 탐색</button><button class="nav-btn" data-view="compare">마을 비교</button></nav>
   <div class="header-actions"><a id="catalog-back" class="quiet-btn catalog-back" href="../">← 마을 식물</a><button id="method-button" class="quiet-btn"><span data-icon="info"></span><span>데이터 안내</span></button><button id="export-button" class="outline-btn"><span data-icon="download"></span><span>자료 내보내기</span></button></div>
 </header>

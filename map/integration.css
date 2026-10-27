@@ -14,10 +14,20 @@
 :root[data-village=harye]{--green:#6d4541;--green-dark:#4f312e;--vc:#d2b2af;--vsoft:#f2e9e8}
 :root[data-village=hogeun]{--green:#636d41;--green-dark:#475030;--vc:#aeba84;--vsoft:#f0f2e8}
 :root[data-village] .header{border-bottom:4px solid var(--vc)}
-:root[data-village] .village-button.active{border-color:var(--green);background:var(--vsoft)}
+:root[data-village] .village-button.active{border-color:var(--green);background:var(--vsoft);color:var(--green)}
+:root[data-village] .village-button.active small{color:var(--green)}
 :root[data-village] .district-tag{background:var(--vc);color:#2f261c}
 :root[data-village] #village-title{color:var(--green)}
 :root[data-village] .page-heading .eyebrow{color:var(--green)}
 :root[data-village] .metric{border-top:4px solid var(--vc)}
 :root[data-village] .panel-tabs button.active{color:var(--green)}
 :root[data-village] .catalog-back{color:var(--green);border-color:var(--vc)}
+/* ---- Plant-catalog theme: same paper, ink, lines and fonts as the plant site ---- */
+:root{--ink:#493820;--muted:#77715f;--line:#d9d4bd;--paper:#f5f2e6;--panel:#fffdf6}
+body{background:var(--paper);color:var(--ink)}
+.header{background:#fffdf6}
+.brand-icon.brand-leaf{background:#b9b75e;color:#44351f;font-family:Georgia,serif;font-size:30px;line-height:1}
+.brand strong{font-family:'Gowun Batang',serif;font-weight:700;letter-spacing:-.3px;color:#44351f}
+.brand small{color:#77715f}
+#village-title,.sidebar-heading h2,.page-heading h1,h2,h3{font-family:'Gowun Batang',serif}
+:root:not([data-village]) .header{border-bottom:4px solid #b9b75e}

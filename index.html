@@ -185,6 +185,20 @@ section+section{margin-top:64px}
 .vm-survey small{flex-basis:100%;font-size:12.5px;color:#6b5b48}
 .vm-pending{background:#f6f1e6;border:1px dashed #d8cdb4;padding:16px 18px;font-size:14px;color:#5f5440;margin-top:22px}
 .vm-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.atlas-embed{margin-top:22px;border:1px solid #c9d8c4;border-radius:2px;overflow:hidden;background:#fff}
+.atlas-head{display:flex;align-items:center;gap:14px;padding:14px 16px;background:#e9f0e7;color:#1f4a3e}
+.atlas-head .atlas-go{color:#1f4a3e;text-decoration:none;border:1px solid #9fbb9a;background:#fff;padding:7px 12px;border-radius:2px}
+.atlas-head .atlas-go:hover{background:#f3f7f1}
+.atlas-frame{display:block;width:100%;height:min(760px,82vh);border:0;background:#f7f8f4}
+.atlas-card{display:flex;align-items:center;gap:16px;margin-top:14px;padding:16px 18px;background:#e9f0e7;border:1px solid #c9d8c4;border-radius:2px;color:#1f4a3e;text-decoration:none;transition:background .2s,box-shadow .2s}
+.atlas-card:hover{background:#dfeadc;box-shadow:0 6px 16px #1f4a3e1f}
+.atlas-icon{flex:0 0 44px;height:44px;border-radius:10px;background:#245344;color:#e0ecc1;display:flex;align-items:center;justify-content:center}
+.atlas-icon svg{width:28px;height:28px}
+.atlas-text{flex:1;min-width:0}
+.atlas-text b{display:block;font-size:15.5px}
+.atlas-text small{display:block;font-size:12.5px;color:#4b6a5f;margin-top:2px}
+.atlas-go{font-size:13px;font-weight:700;white-space:nowrap}
+.sec-link{font-size:13px;font-weight:700;color:#245344;text-decoration:none;border-bottom:1px solid #24534466;margin-left:12px;white-space:nowrap}
 .btn{border:1px solid var(--deep);background:var(--deep);color:#fffdf0;padding:11px 16px;font-size:14px;font-weight:700;border-radius:2px}
 .btn.ghost{background:transparent;color:var(--deep)}
 
@@ -252,6 +266,9 @@ footer .credit{margin-top:12px;font-family:var(--serif);font-weight:700;color:va
   .pm-go-btns .btn{flex:1 1 100%}
   .vm-head{padding:24px 16px 18px}.vm-body{padding:18px 16px 24px}
   .facts{grid-template-columns:80px minmax(0,1fr)}
+  .atlas-head{flex-wrap:wrap;gap:10px 12px}.atlas-head .atlas-go{margin-left:auto}
+  .atlas-frame{height:78vh}
+  .atlas-head .atlas-text small{display:none}
   .org{grid-template-columns:88px minmax(0,1fr)}
   .kind-tabs{display:flex;width:100%}.kind-tabs button{flex:1;padding:8px 6px;font-size:12.5px;line-height:1.35}.kind-tabs .n{display:block}
 }
@@ -281,7 +298,7 @@ footer .credit{margin-top:12px;font-family:var(--serif);font-weight:700;color:va
 
 <main>
   <section id="villages" aria-labelledby="villagesTitle">
-    <div class="sec-head"><span class="sec-num">01</span><h2 id="villagesTitle">우리 마을</h2><p>마을을 선택하면 지도와 마을 정보를 자세히 볼 수 있습니다.</p></div>
+    <div class="sec-head"><span class="sec-num">01</span><h2 id="villagesTitle">우리 마을</h2><p>마을을 선택하면 지도와 마을 정보를 자세히 볼 수 있습니다.<a class="sec-link" href="map/?village=all">네 마을 환경지도 →</a></p></div>
     <div class="village-grid" id="villageGrid"></div>
   </section>
 
@@ -628,6 +645,10 @@ const villageInfo = {
  }
 };
 const OSM = "기본도 © OpenStreetMap contributors";
+/* 마을 환경지도(map 폴더)로 연결할 때 쓰는 마을 ID */
+const atlasIds = {"저지리":"jeoji","평대리":"pyeongdae","하례리":"harye","호근동":"hogeun"};
+const atlasUrl = v => "map/?village=" + (atlasIds[v]||"all");
+const ATLAS_ICON = '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 23 13 8l6 10 3-5 6 10H5Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 27c5-3 11 2 16-1" stroke="currentColor" stroke-width="1.6"/><circle cx="23" cy="7" r="2" fill="currentColor"/></svg>';
 /* 첫 화면 대표 사진: 마을마다 '우리 마을 주요종' 한 종씩. 바꾸려면 plant와 img만 고치면 됩니다. */
 const heroPicks = [
   {village:"저지리", plant:"제주백서향", img:"hero/jeoji.jpg", note:"저지 곶자왈 대표 · 제주 특산식물"},
@@ -674,6 +695,10 @@ function init(){
   });
   initViewer();
   render();
+  /* 환경지도에서 돌아올 때: ?village=jeoji 처럼 오면 그 마을 식물 목록을 보여 줌 */
+  const back=new URLSearchParams(location.search).get("village");
+  const backName=Object.keys(atlasIds).find(k=>atlasIds[k]===back);
+  if(backName){setVillage(backName);requestAnimationFrame(()=>$("plants").scrollIntoView());}
 }
 
 /* ===== 첫 화면 대표 사진 ===== */
@@ -711,6 +736,9 @@ function openVillage(v){
   parts.push(`<div class="vm-body"><figure class="vm-map"><button type="button" id="vmMapBtn" aria-label="${esc(v)} 지도 크게 보기"><img src="${d.map}" alt="${esc(v)} 지도: ${esc(d.legend.join(", "))} 표시"><span class="zoom-hint">지도 크게 보기 ⤢</span></button>
     <figcaption><span>범례: ${esc(d.legend.join(" · "))} · 빨간 점: 식물 조사 장소 · 파란 점: 마을 주요 장소</span><span>${OSM}</span></figcaption></figure>`);
   if(d.surveySites&&d.surveySites.length) parts.push(`<div class="vm-survey"><b>식물 조사 장소</b><span>${d.surveySites.map(esc).join(" · ")}</span></div>`);
+  parts.push(`<section class="atlas-embed" aria-label="${esc(v)} 환경지도">
+    <div class="atlas-head"><span class="atlas-icon">${ATLAS_ICON}</span><span class="atlas-text"><b>${esc(v)} 환경지도</b><small>농지·투수성 지형·용천수, 마을 그림지도와 탐방길을 지도에서 직접 살펴보세요. 번호나 지점을 누르면 자세한 설명이 나옵니다.</small></span><a class="atlas-go" href="${atlasUrl(v)}">크게 보기 ↗</a></div>
+    <iframe class="atlas-frame" src="${atlasUrl(v)}&embed=1" title="${esc(v)} 환경지도" loading="lazy" allow="geolocation" allowfullscreen></iframe></section>`);
   const inf=d.info;
   if(inf){
     let left=`<div class="vm-box"><h3>마을 개요</h3><p>${esc(inf.overview)}</p>`;
@@ -726,7 +754,7 @@ function openVillage(v){
     parts.push(`<div class="vm-pending">${esc(v)} 마을 소개는 준비 중입니다. 지도를 눌러 마을 범위와 ${esc(d.legend.slice(1).join("·"))} 위치를 확인해 보세요.</div>`);
   }
   if(d.courses&&d.courses.length) parts.push(`<div class="vm-box vm-wide" style="margin-top:18px"><h3>주민이 안내하는 생태관광 코스</h3>${d.courses.map(c=>`<p>${esc(c)}</p>`).join("")}</div>`);
-  parts.push(`<div class="vm-actions"><button class="btn" id="vmPlants">${esc(v)} 식물 보기 (${s.total}종) →</button><button class="btn ghost" id="vmUniq">${esc(v)} 주요종만 보기 (${s.uniq}종)</button></div></div>`);
+  parts.push(`<div class="vm-actions"><button class="btn" id="vmPlants">${esc(v)} 식물 보기 (${s.total}종) →</button><button class="btn ghost" id="vmUniq">${esc(v)} 주요종만 보기 (${s.uniq}종)</button><a class="btn ghost" href="${atlasUrl(v)}" style="text-decoration:none">${esc(v)} 환경지도 →</a></div></div>`);
   $("vmBody").innerHTML=parts.join("");
   $("vmMapBtn").addEventListener("click",()=>openViewer(d.map,`${v} 지도`,`범례: ${d.legend.join(" · ")} — ${OSM}`));
   $("vmPlants").addEventListener("click",()=>{closeOverlay("village");state.kind="all";setVillage(v);$("plants").scrollIntoView();});

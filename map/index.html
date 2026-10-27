@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="제주 네 마을의 농지, 투수성 지형, 용천수를 살펴보는 인터랙티브 환경지도.">
+  <meta name="theme-color" content="#214f43">
+  <title>제주 마을 환경지도 · KMYN</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="vendor/leaflet.css"><link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="guides.css?v=20261025-pin-selection">
+  <link rel="stylesheet" href="integration.css"><script src="integration.js" defer></script>
+  <script src="vendor/leaflet.js" defer></script><script src="guides.js?v=20261025-pin-selection" defer></script><script src="walking.js" defer></script><script src="app.js?v=20261025-pin-selection" defer></script>
+</head>
+<body>
+<header class="header">
+  <a class="brand" href="#" aria-label="환경지도 처음으로"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M5 23 13 8l6 10 3-5 6 10H5Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 27c5-3 11 2 16-1" stroke="currentColor" stroke-width="1.6"/><circle cx="23" cy="7" r="2" fill="currentColor"/></svg></span><span><strong>제주 마을 환경지도</strong><small>KMYN <span> / </span> JEJU VILLAGE ATLAS</small></span></a>
+  <nav class="main-nav" aria-label="화면 선택"><button class="nav-btn active" data-view="map">지도 탐색</button><button class="nav-btn" data-view="compare">마을 비교</button></nav>
+  <div class="header-actions"><a id="catalog-back" class="quiet-btn catalog-back" href="../">← 마을 식물</a><button id="method-button" class="quiet-btn"><span data-icon="info"></span><span>데이터 안내</span></button><button id="export-button" class="outline-btn"><span data-icon="download"></span><span>자료 내보내기</span></button></div>
+</header>
+<main class="workspace" id="workspace">
+  <aside class="sidebar" aria-label="마을과 지도 레이어 선택">
+    <div class="sidebar-heading"><span class="eyebrow">EXPLORE JEJU</span><h2>마을을 선택하세요</h2><p>마을마다 다른 물과 땅의 풍경</p></div>
+    <div id="village-buttons" class="village-buttons"></div>
+    <div class="divider"></div>
+    <div class="section-label"><h3>지도 레이어</h3><button id="reset-layers" class="text-button">초기화</button></div>
+    <div id="layer-controls"></div>
+    <div id="guide-layer-controls"></div>
+    <div class="opacity-control"><label for="opacity">농지 색상 농도</label><output id="opacity-value">65%</output><input id="opacity" type="range" min="15" max="90" value="65"></div>
+    <div class="divider"></div>
+    <div class="section-label"><h3>농지 유형</h3><span class="hint">지도 표시</span></div>
+    <div id="type-controls" class="type-controls"></div>
+    <div class="sidebar-note"><span data-icon="layers"></span><p>지도 위 구획이나 용천수를 누르면<br>해당 항목의 정보를 볼 수 있어요.</p></div>
+    <button class="data-note" id="quality-button"><span class="status-dot amber"></span>좌표계·지형 데이터 확인 사항 <span>↗</span></button>
+  </aside>
+  <section class="main-content" id="map-view" aria-label="지도 탐색">
+    <div class="page-heading"><div><span class="eyebrow">LAND, WATER & VILLAGE</span><div class="title-line"><h1 id="village-title">하례리</h1><span id="village-district" class="district-tag">서귀포시 남원읍</span></div><p id="village-description">마을의 농지와 지형, 물의 자취를 함께 살펴보세요.</p></div><div class="scope-label"><span class="status-dot"></span>업로드 자료 기준</div></div>
+    <div id="metrics" class="metrics"></div>
+    <div class="map-analysis">
+      <div class="map-shell">
+        <div class="map-topline"><span><span class="status-dot"></span><strong id="map-scope">하례리</strong><span class="muted">공간 데이터</span></span><button id="fit-button" class="map-inline-btn"><span data-icon="fit"></span>전체 보기</button></div>
+        <div id="map" role="region" aria-label="제주 마을 환경지도"></div>
+        <div class="map-search"><span data-icon="search"></span><input id="search" type="search" placeholder="마을 명소 · 숲길 · 용천수 · 농지 ID" aria-label="지도 항목 검색"><div id="search-results" class="search-results" hidden></div></div>
+        <button id="open-illustration-map" class="illustration-map-button"><span data-icon="globe"></span>그림지도 펼치기</button>
+        <button id="location-button" class="location-map-button" aria-pressed="false" title="기기 권한을 허용하면 현재 위치와 정확도 범위를 표시합니다. 위치는 서버에 저장하지 않습니다."><span>◎</span> 내 위치</button>
+        <div id="active-route-chip" class="active-route-chip" hidden></div>
+        <p id="gps-route-status" class="sr-only" role="status" aria-live="polite"></p>
+        <div class="basemap-control" aria-label="배경지도 선택"><button class="active" data-base="light">기본지도</button><button data-base="satellite">위성</button><button data-base="none">도형만</button></div>
+        <div class="map-tools"><button id="zoom-in" aria-label="지도 확대">+</button><button id="zoom-out" aria-label="지도 축소">−</button></div>
+        <div class="north" aria-hidden="true"><b>N</b><svg viewBox="0 0 22 30"><path d="M11 3 18 25 11 20 4 25Z" fill="#244d43"/><path d="M11 3v17l7 5Z" fill="#a8beb4"/></svg></div>
+        <div class="map-legend" id="map-legend" role="region" aria-label="지도 읽기" hidden></div>
+        <button class="map-legend map-legend-toggle" id="legend-open" type="button" aria-controls="map-legend" aria-expanded="false" hidden><span data-icon="layers"></span>지도 읽기 <span aria-hidden="true">⌃</span></button>
+        <div class="coordinate-readout" id="coordinate-readout">EPSG:4326 · 좌표계 추정 적용</div>
+        <div id="tile-status" class="tile-status" hidden>배경지도를 불러오지 못했습니다. 원본 도형은 탐색할 수 있습니다.</div>
+        <div id="map-loading" class="map-loading"><div class="spinner"></div><span>마을의 지도를 펼치는 중</span></div>
+      </div>
+      <aside class="analysis-panel" aria-label="마을 통계와 선택한 항목">
+        <div class="panel-tabs" role="tablist"><button class="active" id="guide-tab" role="tab" aria-selected="true">마을 안내</button><button id="analysis-tab" role="tab" aria-selected="false">마을 통계</button><button id="terrain-tab" role="tab" aria-selected="false">지형 안내</button><button id="detail-tab" role="tab" aria-selected="false">선택 항목 <span id="selection-dot" hidden></span></button></div>
+        <div id="guide-content" class="panel-content"></div>
+        <div id="analysis-content" class="panel-content" hidden></div>
+        <div id="terrain-content" class="panel-content" hidden></div>
+        <div id="detail-content" class="panel-content" hidden><div class="empty-detail"><span data-icon="cursor"></span><h3>지도에서 하나를 선택하세요</h3><p>농지 구획, 지형, 용천수를 누르면<br>원본 속성과 위치를 확인할 수 있어요.</p></div></div>
+      </aside>
+    </div>
+    <div class="map-footer"><span id="visible-count">자료를 불러오는 중</span><span>농지 면적: 원본 AREA · 마을선: 법정구역 참조 경계</span></div>
+  </section>
+  <section id="compare-view" class="compare-view" hidden aria-label="네 마을 통계 비교"></section>
+</main>
+<dialog id="info-dialog" class="dialog"><div class="dialog-header"><div><span class="eyebrow">ABOUT THE DATA</span><h2>데이터와 계산 기준</h2></div><button class="icon-btn close-dialog" aria-label="닫기">×</button></div><div id="info-content" class="dialog-body"></div></dialog>
+<dialog id="export-dialog" class="dialog export-dialog"><div class="dialog-header"><div><span class="eyebrow">EXPORT</span><h2>자료 내보내기</h2></div><button class="icon-btn close-dialog" aria-label="닫기">×</button></div><div class="dialog-body"><p id="export-scope"></p><button class="export-option" data-export="summary"><span data-icon="chart"></span><span><strong>마을별 요약 CSV</strong><small>면적·구획 수·농지 비율 · 네 마을 전체</small></span><span>↓</span></button><button class="export-option" data-export="springs"><span data-icon="water"></span><span><strong>용천수 목록 CSV</strong><small>선택 마을의 명칭·용도·위치확인·좌표</small></span><span>↓</span></button><button class="export-option" data-export="geojson"><span data-icon="layers"></span><span><strong>지도 데이터 GeoJSON</strong><small>선택 마을의 원본 GIS 레이어와 보충 지형 속성</small></span><span>↓</span></button><p class="small-note">선택 마을의 항목을 표시 필터와 관계없이 내보냅니다. GIS GeoJSON에는 원본 레이어와 보충 지형 속성을 수록하며 외부 참조 경계·안내도 장소는 제외합니다. 안내도 장소는 별도 CSV로 제공합니다.</p></div></dialog>
+<div id="toast" role="status" class="toast" hidden></div>
+<dialog id="illustration-dialog" class="dialog illustration-dialog" aria-labelledby="illustration-title">
+  <div class="dialog-header"><div><span class="eyebrow">VILLAGE STORIES</span><h2 id="illustration-title">마을 그림지도</h2></div><button class="icon-btn close-dialog" aria-label="그림지도 닫기">×</button></div>
+  <div class="illustration-toolbar"><div id="illustration-villages"></div><div id="illustration-pages"></div><button id="illustration-fit" class="text-button">지도 전체 보기</button></div>
+  <div class="illustration-body"><div class="illustration-canvas"><div id="illustration-map" role="region" aria-label="확대하고 장소를 선택할 수 있는 원본 마을 안내도"></div><div class="illustration-hint">드래그로 이동 · + − 로 확대 · 번호를 눌러 장소 보기</div></div><aside id="illustration-detail" class="illustration-detail"></aside></div>
+  <div class="illustration-source" id="illustration-source"></div>
+</dialog>
+</body></html>

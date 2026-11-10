@@ -8,11 +8,11 @@
 .atlas-locked .sidebar-heading,.atlas-locked #village-buttons,.atlas-locked #village-buttons + .divider,.atlas-locked #illustration-villages,.atlas-locked .village-label{display:none!important}
 /* Catalog site: show only the four village choices (no "네 마을 전체") */
 #village-buttons .village-button.overview{display:none!important}
-/* Village colours (same as the plant catalog): 저지리 #c697b7 · 평대리 #bdbb70 · 하례리 #d2b2af · 호근동 #aeba84 */
-:root[data-village=jeoji]{--green:#6d405f;--green-dark:#4e2d44;--vc:#c697b7;--vsoft:#f2e8ef}
-:root[data-village=pyeongdae]{--green:#666533;--green-dark:#4a4924;--vc:#bdbb70;--vsoft:#f4f3e7}
-:root[data-village=harye]{--green:#6d4541;--green-dark:#4f312e;--vc:#d2b2af;--vsoft:#f2e9e8}
-:root[data-village=hogeun]{--green:#636d41;--green-dark:#475030;--vc:#aeba84;--vsoft:#f0f2e8}
+/* Village colours (same as the plant catalog and booklet): 저지리 #b8c48b · 평대리 #ddbab8 · 하례리 #b7b56f · 호근동 #cf9ec0 */
+:root[data-village=jeoji]{--green:#646d41;--green-dark:#495030;--vc:#b8c48b;--vsoft:#f0f2e8}
+:root[data-village=pyeongdae]{--green:#6d4341;--green-dark:#4f302e;--vc:#ddbab8;--vsoft:#f2e9e8}
+:root[data-village=harye]{--green:#666533;--green-dark:#4a4924;--vc:#b7b56f;--vsoft:#f4f4e7}
+:root[data-village=hogeun]{--green:#6d405f;--green-dark:#4e2d44;--vc:#cf9ec0;--vsoft:#f2e8ef}
 :root[data-village] .header{border-bottom:4px solid var(--vc)}
 :root[data-village] .village-button.active{border-color:var(--green);background:var(--vsoft);color:var(--green)}
 :root[data-village] .village-button.active small{color:var(--green)}

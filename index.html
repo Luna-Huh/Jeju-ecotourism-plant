@@ -12,7 +12,7 @@
 <style>
 :root{
   --ink:#493820;--muted:#77715f;--paper:#f5f2e6;--card:#fffdf6;--line:#d9d4bd;--green:#77783d;--soft:#eae8d3;--accent:#b9b75e;--deep:#44351f;--table:#eceee6;--usage:#eef0e8;
-  --v-jeoji:#b8c48b;--v-pyeongdae:#f5c6c5;--v-harye:#c5c284;--v-hogeun:#d3b5d8;
+  --v-jeoji:#b9c58c;--v-pyeongdae:#f5c6c5;--v-harye:#c5c284;--v-hogeun:#dcbbda;
   --serif:"Gowun Batang","Nanum Myeongjo",serif;
   --sans:"Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
 }
@@ -392,7 +392,7 @@ const villageOrder = ["저지리","평대리","하례리","호근동"];
 const villageInfo = {
  "저지리": {
   "en": "Jeoji-ri",
-  "color": "#b8c48b",
+  "color": "#b9c58c",
   "map": "village_maps/jeoji.jpg",
   "thumb": "village_maps/jeoji_thumb.jpg",
   "legend": [
@@ -585,7 +585,7 @@ const villageInfo = {
  },
  "호근동": {
   "en": "Hogeun-dong",
-  "color": "#d3b5d8",
+  "color": "#dcbbda",
   "map": "village_maps/hogeun.jpg",
   "thumb": "village_maps/hogeun_thumb.jpg",
   "legend": [
@@ -650,7 +650,7 @@ const villageInfo = {
 const OSM = "기본도 © OpenStreetMap contributors";
 /* 마을 환경지도(map 폴더)로 연결할 때 쓰는 마을 ID */
 const atlasIds = {"저지리":"jeoji","평대리":"pyeongdae","하례리":"harye","호근동":"hogeun"};
-const atlasDeep = {"저지리":"#646d41","평대리":"#6d4241","하례리":"#666433","호근동":"#67406d"};
+const atlasDeep = {"저지리":"#646d41","평대리":"#6d4241","하례리":"#666433","호근동":"#6d406a"};
 const atlasUrl = v => "map/?village=" + (atlasIds[v]||"all");
 const ATLAS_ICON = '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 23 13 8l6 10 3-5 6 10H5Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 27c5-3 11 2 16-1" stroke="currentColor" stroke-width="1.6"/><circle cx="23" cy="7" r="2" fill="currentColor"/></svg>';
 /* 첫 화면 대표 사진: 마을마다 '우리 마을 주요종' 한 종씩. 바꾸려면 plant와 img만 고치면 됩니다. */
